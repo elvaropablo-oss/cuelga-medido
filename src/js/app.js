@@ -61,7 +61,7 @@ if (gridForm) {
       show(document.querySelector('#grid-result'), `<p class="eyebrow">Plano calculado</p><h2>${result.columns} × ${result.rows} marcos</h2><p>Conjunto de ${fmt(result.footprint[0])} × ${fmt(result.footprint[1])} cm. Empieza a ${fmt(result.left)} cm desde la izquierda y ${fmt(result.bottom)} cm desde el suelo.</p><details><summary>Ver las ${result.positions.length} marcas</summary><div class="table-wrap"><table><thead><tr><th>Marco</th><th>Centro desde izquierda</th><th>Anclaje desde suelo</th></tr></thead><tbody>${result.positions.map((item) => `<tr><td>${item.number}</td><td>${fmt(item.centerX)} cm</td><td>${fmt(item.hookHeight)} cm</td></tr>`).join('')}</tbody></table></div></details>`);
       const preview = document.querySelector('#wall-preview');
       preview.style.aspectRatio = `${result.wall[0]} / ${result.wall[1]}`;
-      preview.innerHTML = `<span class="floor">suelo</span>${result.positions.map((item) => `<i aria-hidden="true" style="left:${(item.centerX - result.frame[0] / 2) / result.wall[0] * 100}%;bottom:${(item.centerY - result.frame[1] / 2) / result.wall[1] * 100}%;width:${result.frame[0] / result.wall[0] * 100}%;height:${result.frame[1] / result.wall[1] * 100}%"><b>${item.number}</b></i>`).join('')}`;
+      preview.innerHTML = result.positions.map((item) => `<i aria-hidden="true" style="left:${(item.centerX - result.frame[0] / 2) / result.wall[0] * 100}%;bottom:${(item.centerY - result.frame[1] / 2) / result.wall[1] * 100}%;width:${result.frame[0] / result.wall[0] * 100}%;height:${result.frame[1] / result.wall[1] * 100}%"><b>${item.number}</b></i>`).join('');
       preview.hidden = false;
       save({ type: 'grid', ...result, savedAt: new Date().toISOString() });
     } catch (reason) { fail(form, reason); }
