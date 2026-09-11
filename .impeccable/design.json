@@ -1,0 +1,11 @@
+{
+  "schemaVersion":2,
+  "project":"CuelgaMedido",
+  "northStar":"A contemporary gallery installation plan where every frame, centre line and hanging mark feels deliberate.",
+  "palette":{"ink":"#161616","muted":"#66645f","wall":"#f2f1ed","white":"#ffffff","red":"#ef493d","blue":"#3448d8"},
+  "typography":{"display":"Iowan Old Style / Baskerville / Georgia","body":"Segoe UI Variable / Aptos","measurements":"Cascadia Mono / Consolas"},
+  "geometry":{"cards":"physical black frames","corners":"square","depth":"hard blue or red offsets"},
+  "motion":{"buttonLift":"150ms","reducedMotion":true},
+  "breakpoints":[840,560],
+  "components":["framed-brand-mark","installation-hero-diagram","gallery-card-wall","measurement-form","mounting-board-result"]
+}
