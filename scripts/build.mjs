@@ -6,9 +6,27 @@ import { renderPage } from '../src/templates/site.mjs';
 import { site } from '../site.config.mjs';
 import { applyAnalyticsConsent } from './analytics-consent.mjs';
 import { applyShareableCalculations } from './shareable-calculations.mjs';
+import { applyCalculationExplanations } from './calculation-explanations.mjs';
 
 const verificationTag = '<meta name="google-site-verification" content="EwTiLP4eMZK5K7W9U_5tpM7cvJsn4ZaLvRwKYrmuuV0">';
 const shareableForms = ['hook-form', 'row-form', 'grid-form'];
+const explanations = {
+  'hook-form': {
+    formula: 'centro horizontal = ancho de pared ÷ 2; parte superior = altura del centro + alto del marco ÷ 2; altura del anclaje = parte superior − caída del colgador',
+    fields: [['wallWidth', 'Ancho de pared', 'cm'], ['frameWidth', 'Ancho del marco', 'cm'], ['frameHeight', 'Alto del marco', 'cm'], ['centerHeight', 'Altura del centro', 'cm'], ['hangerDrop', 'Caída del colgador', 'cm'], ['hookSeparation', 'Separación entre anclajes', 'cm']],
+    note: 'Con dos anclajes, se colocan simétricamente a cada lado del centro usando la mitad de la separación indicada.'
+  },
+  'row-form': {
+    formula: 'modo compacto: ancho total = nº marcos × ancho + (nº marcos − 1) × separación; margen exterior = (ancho disponible − ancho total) ÷ 2. Modo equilibrado: separación = (ancho disponible − nº marcos × ancho) ÷ (nº marcos + 1)',
+    fields: [['availableWidth', 'Ancho disponible', 'cm'], ['frameWidth', 'Ancho de cada marco', 'cm'], ['count', 'Número de marcos'], ['gap', 'Separación indicada', 'cm']],
+    note: 'Los centros se calculan desde el margen exterior, sumando sucesivamente ancho de marco y separación.'
+  },
+  'grid-form': {
+    formula: 'ancho conjunto = columnas × ancho marco + (columnas − 1) × separación X; alto conjunto = filas × alto marco + (filas − 1) × separación Y; el conjunto se centra respecto a la pared y a la altura indicada',
+    fields: [['wallWidth', 'Ancho de pared', 'cm'], ['wallHeight', 'Alto de pared', 'cm'], ['frameWidth', 'Ancho del marco', 'cm'], ['frameHeight', 'Alto del marco', 'cm'], ['columns', 'Columnas'], ['rows', 'Filas'], ['gapX', 'Separación horizontal', 'cm'], ['gapY', 'Separación vertical', 'cm'], ['centerHeight', 'Altura del centro del conjunto', 'cm'], ['hangerDrop', 'Caída del colgador', 'cm']],
+    note: 'Cada anclaje se obtiene desde el centro de su marco: centro vertical + medio alto del marco − caída del colgador.'
+  }
+};
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 await rm(dist, { recursive: true, force: true });
@@ -24,6 +42,7 @@ for (const page of pages) {
     storageKey: 'cm:v1:analytics-consent'
   });
   html = applyShareableCalculations(html, shareableForms);
+  html = applyCalculationExplanations(html, explanations);
   if (page.path === '') html = html.replace('<head>', `<head>\n  ${verificationTag}`);
   await writeFile(destination, html, 'utf8');
 }
